@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import br.com.alura.orgs.database.AppDatabase
 import br.com.alura.orgs.databinding.ActivityFormularioProdutoBinding
-import br.com.alura.orgs.extensions.formataParaMoedaBrasileira
 import br.com.alura.orgs.extensions.tentaCarregarImagem
 import br.com.alura.orgs.model.Produto
 import br.com.alura.orgs.ui.dialog.FormularioImagemDialog
@@ -28,7 +27,23 @@ class FormularioProdutoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         title = "Cadastrar produto"
-        produtoId = intent.getIntExtra("PRODUTO_ID", 0)
+        tentaCarregarProduto()
+        configuraBotaoSalvar()
+        configuraImagemFormulario()
+    }
+
+    private fun configuraImagemFormulario() {
+        binding.activityFormularioProdutoImagem.setOnClickListener {
+            FormularioImagemDialog(this)
+                .mostra(url) { imagem ->
+                    url = imagem
+                    binding.activityFormularioProdutoImagem.tentaCarregarImagem(url)
+                }
+        }
+    }
+
+    private fun tentaCarregarProduto() {
+        produtoId = intent.getIntExtra(CHAVE_PRODUTO_ID, 0)
         thread {
             produtoDao.buscaProduto(produtoId)?.let { produtoEncontrado ->
                 runOnUiThread {
@@ -44,14 +59,6 @@ class FormularioProdutoActivity : AppCompatActivity() {
                         .setText(produtoEncontrado.valor.toPlainString())
                 }
             }
-        }
-        configuraBotaoSalvar()
-        binding.activityFormularioProdutoImagem.setOnClickListener {
-            FormularioImagemDialog(this)
-                .mostra(url) { imagem ->
-                    url = imagem
-                    binding.activityFormularioProdutoImagem.tentaCarregarImagem(url)
-                }
         }
     }
 

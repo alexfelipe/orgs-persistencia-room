@@ -22,5 +22,4 @@ interface ProdutosDao {
     @Query("SELECT * FROM Produto WHERE id = :id")
     fun carregaProduto(id: Int): LiveData<Produto>
 
-
 }

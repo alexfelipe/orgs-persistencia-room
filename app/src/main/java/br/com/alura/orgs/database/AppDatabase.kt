@@ -6,6 +6,8 @@ import br.com.alura.orgs.database.converter.BigDecimalConverter
 import br.com.alura.orgs.database.dao.ProdutosDao
 import br.com.alura.orgs.model.Produto
 
+private const val NOME_BANCO_DE_DADOS = "orgs.db"
+
 @Database(
     entities = [Produto::class],
     version = 1,
@@ -24,7 +26,7 @@ abstract class AppDatabase : RoomDatabase() {
             db = Room.databaseBuilder(
                 context,
                 AppDatabase::class.java,
-                "orgs.db"
+                NOME_BANCO_DE_DADOS
             ).build()
             return db
         }

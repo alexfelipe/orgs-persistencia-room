@@ -40,29 +40,36 @@ class DetalhesProdutoActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_detalhes_editar -> {
-                Intent(
-                    this,
-                    FormularioProdutoActivity::class.java
-                ).apply {
-                    produto?.let {
-                        putExtra("PRODUTO_ID", it.id)
-                        startActivity(this)
-                    }
-                }
+                vaiParaFormulario()
             }
             R.id.menu_detalhes_remover -> {
-                thread {
-                    produto?.let(produtoDao::remove)
-                    finish()
-                }
+                remove()
             }
         }
         return super.onOptionsItemSelected(item)
     }
 
+    private fun vaiParaFormulario() {
+        Intent(
+            this,
+            FormularioProdutoActivity::class.java
+        ).apply {
+            produto?.let {
+                putExtra(CHAVE_PRODUTO_ID, it.id)
+                startActivity(this)
+            }
+        }
+    }
+
+    private fun remove() {
+        thread {
+            produto?.let(produtoDao::remove)
+            finish()
+        }
+    }
+
     private fun tentaCarregarProduto() {
-        id = intent.getIntExtra("PRODUTO_ID", 0)
-        Log.i("DetalhesProduto", "tentaCarregarProduto: $id")
+        id = intent.getIntExtra(CHAVE_PRODUTO_ID, 0)
         produtoDao.carregaProduto(id).observe(this) {
             it?.let { produtoEncontrado ->
                 produto = produtoEncontrado

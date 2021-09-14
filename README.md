@@ -4,20 +4,20 @@
 
 App de simulação um e-commerce de produtos naturais
 
-<!-- ## 🔨 Funcionalidades do projeto
+## 🔨 Funcionalidades do projeto
 
-O projeto permite cadastrar e lista 
+O projeto permite cadastrar, alterar e remover produtos com imagem, nome, descrição e valor. Os produtos salvos são apresentados em uma lista e podem ser visualizado ao realizar o clique.
+
+![](https://media0.giphy.com/media/a3wDNLrQsOclk5B6me/giphy.gif)
 
 ## ✔️ Técnicas e tecnologias utilizadas
 
-**Faça uma lista de tecnologias e técnicas utilizadas (a justificativa e descrição são opcionais)**:
+- `Jetpack Room`: lib para persistência de dados em banco de dados interno com SQLite
+- `Menu de opções`: menu para editar e remover
+- `Thread`: técnica para realizar operações assíncronas com o banco de dados
+- `LiveData`: lib para carregar dados observáveis do banco de dados
 
-- `Funcionalidade 1`: descrição da funcionalidade 1
-- `Funcionalidade 2`: descrição da funcionalidade 2
-  - `Funcionalidade 2a`: descrição da funcionalidade 2a relacionada à funcionalidade 2
-- `Funcionalidade 3`: descrição da funcionalidade 3
-
-## 📁 Acesso ao projeto
+<!-- ## 📁 Acesso ao projeto
 
 **Indique como é possível baixar ou acessar o código fonte do projeto, seja projeto inicial ou final**
 

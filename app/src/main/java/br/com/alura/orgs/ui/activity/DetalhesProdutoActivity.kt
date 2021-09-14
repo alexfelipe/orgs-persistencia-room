@@ -12,6 +12,9 @@ import br.com.alura.orgs.databinding.ActivityDetalhesProdutoBinding
 import br.com.alura.orgs.extensions.formataParaMoedaBrasileira
 import br.com.alura.orgs.extensions.tentaCarregarImagem
 import br.com.alura.orgs.model.Produto
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import kotlin.concurrent.thread
 
 class DetalhesProdutoActivity : AppCompatActivity() {
@@ -62,20 +65,23 @@ class DetalhesProdutoActivity : AppCompatActivity() {
     }
 
     private fun remove() {
-        thread {
-            produto?.let(produtoDao::remove)
+        MainScope().launch {
+            produto?.let {
+                produtoDao.remove(it)
+            }
             finish()
         }
     }
 
     private fun tentaCarregarProduto() {
         id = intent.getIntExtra(CHAVE_PRODUTO_ID, 0)
-        produtoDao.carregaProduto(id).observe(this) {
-            it?.let { produtoEncontrado ->
+        MainScope().launch {
+            produtoDao.carregaProduto(id).collect { produtoEncontrado ->
                 produto = produtoEncontrado
                 preencheCampos(produtoEncontrado)
-            } ?: finish()
+            }
         }
+
     }
 
     private fun preencheCampos(produtoCarregado: Produto) {

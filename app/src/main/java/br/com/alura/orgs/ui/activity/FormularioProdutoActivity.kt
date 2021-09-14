@@ -7,6 +7,8 @@ import br.com.alura.orgs.databinding.ActivityFormularioProdutoBinding
 import br.com.alura.orgs.extensions.tentaCarregarImagem
 import br.com.alura.orgs.model.Produto
 import br.com.alura.orgs.ui.dialog.FormularioImagemDialog
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import kotlin.concurrent.thread
 
@@ -44,7 +46,7 @@ class FormularioProdutoActivity : AppCompatActivity() {
 
     private fun tentaCarregarProduto() {
         produtoId = intent.getIntExtra(CHAVE_PRODUTO_ID, 0)
-        thread {
+        MainScope().launch {
             produtoDao.buscaProduto(produtoId)?.let { produtoEncontrado ->
                 runOnUiThread {
                     title = "Editar produto"
@@ -66,7 +68,7 @@ class FormularioProdutoActivity : AppCompatActivity() {
         val botaoSalvar = binding.activityFormularioProdutoBotaoSalvar
         botaoSalvar.setOnClickListener {
             val produtoNovo = criaProduto()
-            thread {
+            MainScope().launch {
                 produtoDao.salva(produtoNovo)
                 finish()
             }

@@ -6,6 +6,10 @@ import androidx.appcompat.app.AppCompatActivity
 import br.com.alura.orgs.database.AppDatabase
 import br.com.alura.orgs.databinding.ActivityListaProdutosActivityBinding
 import br.com.alura.orgs.ui.recyclerview.adapter.ListaProdutosAdapter
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 class ListaProdutosActivity : AppCompatActivity() {
 
@@ -27,11 +31,9 @@ class ListaProdutosActivity : AppCompatActivity() {
         setContentView(binding.root)
         configuraRecyclerView()
         configuraFab()
-        produtoDao.buscaTodos().observe(
-            this
-        ) {
-            it?.let { produtos ->
-                adapter.atualiza(produtos)
+        MainScope().launch {
+            produtoDao.buscaTodos().collect {
+                adapter.atualiza(it)
             }
         }
     }

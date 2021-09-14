@@ -1,25 +1,25 @@
 package br.com.alura.orgs.database.dao
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
 import br.com.alura.orgs.model.Produto
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ProdutosDao {
 
     @Query("SELECT * FROM Produto")
-    fun buscaTodos(): LiveData<List<Produto>>
+    fun buscaTodos(): Flow<List<Produto>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun salva(produto: Produto)
+    suspend fun salva(produto: Produto)
 
     @Delete
-    fun remove(produto: Produto)
+    suspend fun remove(produto: Produto)
 
     @Query("SELECT * FROM Produto WHERE id = :id")
-    fun buscaProduto(id: Int): Produto?
+    suspend fun buscaProduto(id: Int): Produto?
 
     @Query("SELECT * FROM Produto WHERE id = :id")
-    fun carregaProduto(id: Int): LiveData<Produto>
+    fun carregaProduto(id: Int): Flow<Produto>
 
 }

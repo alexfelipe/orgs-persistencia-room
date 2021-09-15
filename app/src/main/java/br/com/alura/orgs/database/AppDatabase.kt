@@ -10,8 +10,10 @@ private const val NOME_BANCO_DE_DADOS = "orgs.db"
 
 @Database(
     entities = [Produto::class],
-    version = 1,
-    exportSchema = false
+    version = 2,
+    autoMigrations = [
+        AutoMigration(from = 1, to = 2)
+    ]
 )
 @TypeConverters(BigDecimalConverter::class)
 abstract class AppDatabase : RoomDatabase() {
@@ -22,7 +24,7 @@ abstract class AppDatabase : RoomDatabase() {
         private lateinit var db: AppDatabase
 
         fun criaBanco(context: Context): AppDatabase {
-            if(::db.isInitialized) return db
+            if (::db.isInitialized) return db
             db = Room.databaseBuilder(
                 context,
                 AppDatabase::class.java,

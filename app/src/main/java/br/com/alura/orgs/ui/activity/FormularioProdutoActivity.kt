@@ -8,6 +8,7 @@ import br.com.alura.orgs.extensions.tentaCarregarImagem
 import br.com.alura.orgs.model.Produto
 import br.com.alura.orgs.ui.dialog.FormularioImagemDialog
 import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import kotlin.concurrent.thread
@@ -24,6 +25,7 @@ class FormularioProdutoActivity : AppCompatActivity() {
             .produtoDao()
     }
     private var produtoId: Int = 0
+    private var scope = MainScope()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,7 +48,7 @@ class FormularioProdutoActivity : AppCompatActivity() {
 
     private fun tentaCarregarProduto() {
         produtoId = intent.getIntExtra(CHAVE_PRODUTO_ID, 0)
-        MainScope().launch {
+        scope.launch {
             produtoDao.buscaProduto(produtoId)?.let { produtoEncontrado ->
                 runOnUiThread {
                     title = "Editar produto"
@@ -95,6 +97,11 @@ class FormularioProdutoActivity : AppCompatActivity() {
             valor = valor,
             imagem = url
         )
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        scope.cancel()
     }
 
 }

@@ -2,14 +2,13 @@ package br.com.alura.orgs.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import br.com.alura.orgs.database.AppDatabase
 import br.com.alura.orgs.databinding.ActivityListaProdutosActivityBinding
 import br.com.alura.orgs.ui.recyclerview.adapter.ListaProdutosAdapter
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 
 class ListaProdutosActivity : AppCompatActivity() {
 
@@ -25,13 +24,14 @@ class ListaProdutosActivity : AppCompatActivity() {
             .criaBanco(this)
             .produtoDao()
     }
+    private val scope = MainScope()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         configuraRecyclerView()
         configuraFab()
-        MainScope().launch {
+        scope.launch {
             produtoDao.buscaTodos().collect {
                 adapter.atualiza(it)
             }
@@ -62,6 +62,11 @@ class ListaProdutosActivity : AppCompatActivity() {
             }
             startActivity(intent)
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        scope.cancel()
     }
 
 }

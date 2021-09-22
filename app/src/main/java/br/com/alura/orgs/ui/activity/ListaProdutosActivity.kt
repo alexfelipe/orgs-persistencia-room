@@ -25,12 +25,29 @@ class ListaProdutosActivity : AppCompatActivity() {
         configuraRecyclerView()
         configuraFab()
 
+        val db = Room.databaseBuilder(
+            this,
+            AppDatabase::class.java,
+            "orgs.db"
+        ).allowMainThreadQueries()
+            .build()
+        val produtoDao = db.produtoDao()
+//        produtoDao.salva(
+//            Produto(
+//                nome = "nome de teste",
+//                descricao = "descrição de teste",
+//                valor = BigDecimal("10.00")
+//            )
+//        )
+
+        val produtos = produtoDao.buscaTodos()
+        adapter.atualiza(produtos)
     }
 
-    override fun onResume() {
-        super.onResume()
-        adapter.atualiza(dao.buscaTodos())
-    }
+//    override fun onResume() {
+//        super.onResume()
+//        adapter.atualiza(dao.buscaTodos())
+//    }
 
     private fun configuraFab() {
         val fab = binding.activityListaProdutosFab
@@ -39,7 +56,7 @@ class ListaProdutosActivity : AppCompatActivity() {
         }
     }
 
-     private fun vaiParaFormularioProduto() {
+    private fun vaiParaFormularioProduto() {
         val intent = Intent(this, FormularioProdutoActivity::class.java)
         startActivity(intent)
     }

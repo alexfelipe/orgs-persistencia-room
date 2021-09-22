@@ -10,7 +10,7 @@ import java.math.BigDecimal
 @Parcelize
 data class Produto(
     @PrimaryKey(autoGenerate = true)
-    val id: Long =- 0L,
+    val id: Long = 0L,
     val nome: String,
     val descricao: String,
     val valor: BigDecimal,

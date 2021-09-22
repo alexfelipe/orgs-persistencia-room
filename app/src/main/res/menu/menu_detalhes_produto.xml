@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_detalhes_produto_editar"
+        android:icon="@drawable/ic_action_editar"
+        android:title="Editar"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/menu_detalhes_produto_remover"
+        android:icon="@drawable/ic_action_remover"
+        android:title="Remover"
+        app:showAsAction="ifRoom" />
+
+</menu>

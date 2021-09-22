@@ -1,9 +1,11 @@
 package br.com.alura.orgs.ui.recyclerview.adapter
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
 import br.com.alura.orgs.databinding.ProdutoItemBinding
 import br.com.alura.orgs.extensions.formataParaMoedaBrasileira
@@ -28,6 +30,16 @@ class ListaProdutosAdapter(
                 if (::produto.isInitialized) {
                     quandoClicaNoItem(produto)
                 }
+            }
+            itemView.setOnLongClickListener {
+                PopupMenu(context, itemView).apply {
+                    menu.add("teste")
+                    setOnMenuItemClickListener {
+                        Log.i("Popupmenu", ": clicked menu")
+                        true
+                    }
+                }.show()
+                true
             }
         }
 

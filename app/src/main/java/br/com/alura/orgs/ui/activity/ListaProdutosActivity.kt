@@ -3,13 +3,10 @@ package br.com.alura.orgs.ui.activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.room.Room
 import br.com.alura.orgs.dao.ProdutosDao
 import br.com.alura.orgs.database.dao.AppDatabase
 import br.com.alura.orgs.databinding.ActivityListaProdutosActivityBinding
-import br.com.alura.orgs.model.Produto
 import br.com.alura.orgs.ui.recyclerview.adapter.ListaProdutosAdapter
-import java.math.BigDecimal
 
 class ListaProdutosActivity : AppCompatActivity() {
 
@@ -18,6 +15,11 @@ class ListaProdutosActivity : AppCompatActivity() {
     private val binding by lazy {
         ActivityListaProdutosActivityBinding.inflate(layoutInflater)
     }
+    private val produtoDao by lazy {
+        AppDatabase
+            .criaBanco(this)
+            .produtoDao()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,29 +27,13 @@ class ListaProdutosActivity : AppCompatActivity() {
         configuraRecyclerView()
         configuraFab()
 
-        val db = Room.databaseBuilder(
-            this,
-            AppDatabase::class.java,
-            "orgs.db"
-        ).allowMainThreadQueries()
-            .build()
-        val produtoDao = db.produtoDao()
-//        produtoDao.salva(
-//            Produto(
-//                nome = "nome de teste",
-//                descricao = "descrição de teste",
-//                valor = BigDecimal("10.00")
-//            )
-//        )
+    }
 
+    override fun onResume() {
+        super.onResume()
         val produtos = produtoDao.buscaTodos()
         adapter.atualiza(produtos)
     }
-
-//    override fun onResume() {
-//        super.onResume()
-//        adapter.atualiza(dao.buscaTodos())
-//    }
 
     private fun configuraFab() {
         val fab = binding.activityListaProdutosFab

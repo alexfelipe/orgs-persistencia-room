@@ -26,7 +26,6 @@ class ListaProdutosActivity : AppCompatActivity() {
         setContentView(binding.root)
         configuraRecyclerView()
         configuraFab()
-
     }
 
     override fun onResume() {
@@ -55,7 +54,7 @@ class ListaProdutosActivity : AppCompatActivity() {
                 this,
                 DetalhesProdutoActivity::class.java
             ).apply {
-                putExtra(CHAVE_PRODUTO, it)
+                putExtra(CHAVE_PRODUTO_ID, it.id)
             }
             startActivity(intent)
         }

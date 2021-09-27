@@ -17,24 +17,20 @@ class FormularioProdutoActivity : AppCompatActivity() {
     }
     private var url: String? = null
     private var produtoId: Long = 0
+    private val produtoDao by lazy {
+        AppDatabase.criaBanco(this).produtoDao()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         title = "Cadastrar produto"
-
-        produtoId = intent.getLongExtra("PRODUTO_ID", 0L)
-        val produtoDao = AppDatabase.criaBanco(this).produtoDao()
-
-        produtoDao.buscaProdutoPor(produtoId)?.let {
-            title = "Editar produto"
-            binding.activityFormularioProdutoImagem.tentaCarregarImagem(it.imagem)
-            binding.activityFormularioProdutoNome.setText(it.nome)
-            binding.activityFormularioProdutoDescricao.setText(it.descricao)
-            binding.activityFormularioProdutoValor.setText(it.valor.toPlainString())
-        }
-
+        tentaCarregarProduto()
         configuraBotaoSalvar()
+        configuraImagemDoProduto()
+    }
+
+    private fun configuraImagemDoProduto() {
         binding.activityFormularioProdutoImagem.setOnClickListener {
             FormularioImagemDialog(this)
                 .mostra(url) { imagem ->
@@ -44,16 +40,23 @@ class FormularioProdutoActivity : AppCompatActivity() {
         }
     }
 
+    private fun tentaCarregarProduto() {
+        produtoId = intent.getLongExtra(CHAVE_PRODUTO_ID, 0L)
+        produtoDao.buscaProdutoPor(produtoId)?.let {
+            title = "Editar produto"
+            binding.activityFormularioProdutoImagem.tentaCarregarImagem(it.imagem)
+            binding.activityFormularioProdutoNome.setText(it.nome)
+            binding.activityFormularioProdutoDescricao.setText(it.descricao)
+            binding.activityFormularioProdutoValor.setText(it.valor.toPlainString())
+        }
+    }
+
     private fun configuraBotaoSalvar() {
         val botaoSalvar = binding.activityFormularioProdutoBotaoSalvar
         val dao = AppDatabase.criaBanco(this).produtoDao()
         botaoSalvar.setOnClickListener {
             val produtoNovo = criaProduto()
-            if (produtoNovo.id > 0){
-                dao.atualiza(produtoNovo)
-            } else {
-                dao.salva(produtoNovo)
-            }
+            dao.salva(produtoNovo)
             finish()
         }
     }

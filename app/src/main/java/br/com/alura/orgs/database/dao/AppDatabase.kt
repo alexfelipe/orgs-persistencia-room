@@ -8,6 +8,8 @@ import androidx.room.TypeConverters
 import br.com.alura.orgs.database.converter.Converters
 import br.com.alura.orgs.model.Produto
 
+private const val NOME_BANCO = "orgs.db"
+
 @Database(
     version = 1,
     entities = [Produto::class]
@@ -21,7 +23,7 @@ abstract class AppDatabase : RoomDatabase() {
         fun criaBanco(context: Context) = Room.databaseBuilder(
             context,
             AppDatabase::class.java,
-            "orgs.db"
+            NOME_BANCO
         ).allowMainThreadQueries()
             .build()
     }

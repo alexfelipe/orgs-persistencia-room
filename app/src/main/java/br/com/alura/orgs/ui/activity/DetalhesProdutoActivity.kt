@@ -17,17 +17,21 @@ import br.com.alura.orgs.model.Produto
 
 class DetalhesProdutoActivity : AppCompatActivity() {
 
+    private var produtoId: Long = 0L
     private val binding by lazy {
         ActivityDetalhesProdutoBinding.inflate(layoutInflater)
     }
     private lateinit var produto: Produto
+    private val produtoDao by lazy {
+        AppDatabase.criaBanco(this).produtoDao()
+    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (::produto.isInitialized) {
             when (item.itemId) {
                 R.id.menu_detalhes_produto_editar -> {
                     Intent(this, FormularioProdutoActivity::class.java).apply {
-                        putExtra("PRODUTO_ID", produto.id)
+                        putExtra(CHAVE_PRODUTO_ID, produto.id)
                         startActivity(this)
                     }
                 }
@@ -44,11 +48,15 @@ class DetalhesProdutoActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        tentaCarregarProduto()
     }
 
     override fun onResume() {
         super.onResume()
-        tentaCarregarProduto()
+        produtoDao.buscaProdutoPor(produtoId)?.let {
+            produto = it
+            preencheCampos(this.produto)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -57,10 +65,10 @@ class DetalhesProdutoActivity : AppCompatActivity() {
     }
 
     private fun tentaCarregarProduto() {
-        intent.getParcelableExtra<Produto>(CHAVE_PRODUTO)?.let { produtoCarregado ->
-            this.produto = produtoCarregado
-            preencheCampos(this.produto)
-        } ?: finish()
+        produtoId = intent.getLongExtra(CHAVE_PRODUTO_ID, 0L)
+        if (produtoId < 1) {
+            finish()
+        }
     }
 
     private fun preencheCampos(produtoCarregado: Produto) {

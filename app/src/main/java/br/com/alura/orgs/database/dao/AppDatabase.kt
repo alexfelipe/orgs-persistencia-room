@@ -5,6 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import br.com.alura.orgs.database.MIGRATION_1_2
 import br.com.alura.orgs.database.converter.Converters
 import br.com.alura.orgs.model.Produto
 
@@ -26,6 +27,7 @@ abstract class AppDatabase : RoomDatabase() {
             NOME_BANCO
         ).allowMainThreadQueries()
             .fallbackToDestructiveMigration()
+            .addMigrations(MIGRATION_1_2)
             .build()
     }
 

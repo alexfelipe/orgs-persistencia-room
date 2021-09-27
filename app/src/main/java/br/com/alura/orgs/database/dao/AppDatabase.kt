@@ -11,7 +11,7 @@ import br.com.alura.orgs.model.Produto
 private const val NOME_BANCO = "orgs.db"
 
 @Database(
-    version = 1,
+    version = 2,
     entities = [Produto::class]
 )
 @TypeConverters(Converters::class)
@@ -25,6 +25,7 @@ abstract class AppDatabase : RoomDatabase() {
             AppDatabase::class.java,
             NOME_BANCO
         ).allowMainThreadQueries()
+            .fallbackToDestructiveMigration()
             .build()
     }
 

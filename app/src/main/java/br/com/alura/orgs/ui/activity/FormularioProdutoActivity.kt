@@ -16,11 +16,24 @@ class FormularioProdutoActivity : AppCompatActivity() {
         ActivityFormularioProdutoBinding.inflate(layoutInflater)
     }
     private var url: String? = null
+    private var produtoId: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         title = "Cadastrar produto"
+
+        produtoId = intent.getLongExtra("PRODUTO_ID", 0L)
+        val produtoDao = AppDatabase.criaBanco(this).produtoDao()
+
+        produtoDao.buscaProdutoPor(produtoId)?.let {
+            title = "Editar produto"
+            binding.activityFormularioProdutoImagem.tentaCarregarImagem(it.imagem)
+            binding.activityFormularioProdutoNome.setText(it.nome)
+            binding.activityFormularioProdutoDescricao.setText(it.descricao)
+            binding.activityFormularioProdutoValor.setText(it.valor.toPlainString())
+        }
+
         configuraBotaoSalvar()
         binding.activityFormularioProdutoImagem.setOnClickListener {
             FormularioImagemDialog(this)
@@ -36,7 +49,11 @@ class FormularioProdutoActivity : AppCompatActivity() {
         val dao = AppDatabase.criaBanco(this).produtoDao()
         botaoSalvar.setOnClickListener {
             val produtoNovo = criaProduto()
-            dao.salva(produtoNovo)
+            if (produtoNovo.id > 0){
+                dao.atualiza(produtoNovo)
+            } else {
+                dao.salva(produtoNovo)
+            }
             finish()
         }
     }
@@ -55,6 +72,7 @@ class FormularioProdutoActivity : AppCompatActivity() {
         }
 
         return Produto(
+            id = produtoId,
             nome = nome,
             descricao = descricao,
             valor = valor,

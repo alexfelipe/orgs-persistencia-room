@@ -18,4 +18,10 @@ interface ProdutoDao {
     @Delete
     fun remove(produto: Produto)
 
+    @Query("SELECT * FROM Produto WHERE id = :id")
+    fun buscaProdutoPor(id: Long): Produto?
+
+    @Update
+    fun atualiza(produto: Produto)
+
 }

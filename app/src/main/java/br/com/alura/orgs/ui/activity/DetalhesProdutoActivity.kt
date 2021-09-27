@@ -1,5 +1,6 @@
 package br.com.alura.orgs.ui.activity
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -22,12 +23,15 @@ class DetalhesProdutoActivity : AppCompatActivity() {
     private lateinit var produto: Produto
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.menu_detalhes_produto_editar -> {
-                Log.i("DetalhesProduto", "onOptionsItemSelected: editar")
-            }
-            R.id.menu_detalhes_produto_remover -> {
-                if(::produto.isInitialized){
+        if (::produto.isInitialized) {
+            when (item.itemId) {
+                R.id.menu_detalhes_produto_editar -> {
+                    Intent(this, FormularioProdutoActivity::class.java).apply {
+                        putExtra("PRODUTO_ID", produto.id)
+                        startActivity(this)
+                    }
+                }
+                R.id.menu_detalhes_produto_remover -> {
                     val produtoDao = AppDatabase.criaBanco(this).produtoDao()
                     produtoDao.remove(produto)
                     finish()
@@ -40,6 +44,10 @@ class DetalhesProdutoActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+    }
+
+    override fun onResume() {
+        super.onResume()
         tentaCarregarProduto()
     }
 

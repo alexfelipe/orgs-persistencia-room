@@ -15,7 +15,5 @@ data class Produto(
     val nome: String,
     val descricao: String,
     val valor: BigDecimal,
-    val imagem: String? = null,
-    @ColumnInfo(defaultValue = "0")
-    val quantidade: Int = 0
+    val imagem: String? = null
 ) : Parcelable

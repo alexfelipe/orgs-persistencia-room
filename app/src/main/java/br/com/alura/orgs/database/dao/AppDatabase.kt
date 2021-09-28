@@ -6,13 +6,14 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import br.com.alura.orgs.database.MIGRATION_1_2
+import br.com.alura.orgs.database.MIGRATION_2_3
 import br.com.alura.orgs.database.converter.Converters
 import br.com.alura.orgs.model.Produto
 
 private const val NOME_BANCO = "orgs.db"
 
 @Database(
-    version = 2,
+    version = 4,
     entities = [Produto::class]
 )
 @TypeConverters(Converters::class)
@@ -27,7 +28,10 @@ abstract class AppDatabase : RoomDatabase() {
             NOME_BANCO
         ).allowMainThreadQueries()
             .fallbackToDestructiveMigration()
-            .addMigrations(MIGRATION_1_2)
+            .addMigrations(
+                MIGRATION_1_2,
+                MIGRATION_2_3
+            )
             .build()
     }
 
